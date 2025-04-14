@@ -86,7 +86,7 @@ app.config['MYSQL_PASSWORD'] = 'password'     # Your MySQL password
 app.config['MYSQL_DB'] = 'fms2'               # Your database name
 ```
 
-### 3. Run the application
+### 4. Run the application
 
 ```bash
 python app.py
