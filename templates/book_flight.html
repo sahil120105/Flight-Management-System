@@ -1,0 +1,77 @@
+{% extends 'base_passenger.html' %}
+{% block title %}Book Flights{% endblock %}
+
+{% block content %}
+<div class="containermt-4">
+    <h2 class="mb-4 text-primary"><i class="bi bi-airplane-fill me-2"></i> Search & Book Flights</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Filter Your Flight Search</h5>
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    {{ form.from_airport.label(class="form-label") }}
+                    {{ form.from_airport(class="form-control") }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.to_airport.label(class="form-label") }}
+                    {{ form.to_airport(class="form-control") }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.max_price.label(class="form-label") }}
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        {{ form.max_price(class="form-control", placeholder="Max Price") }}
+                    </div>
+                </div>
+            
+                <div class="col-md-6">
+                    {{ form.departure_date.label(class="form-label") }}
+                    {{ form.departure_date(class="form-control", type="date") }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.arrival_date.label(class="form-label") }}
+                    {{ form.arrival_date(class="form-control", type="date") }}
+                </div>
+            
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search me-2"></i> {{ form.submit.label.text }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if flights %}
+    <h3 class="mb-3 text-success"><i class="bi bi-list-check me-2"></i> Available Flights</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for flight in flights %}
+        <div class="col mb-4"> <div class="card shadow-sm h-100 border-primary">
+                <div class="card-header bg-primary text-white py-2">
+                    <h6 class="mb-0"><i class="bi bi-building me-2"></i> {{ flight.Company }}</h6>
+                </div>
+                <div class="card-body py-3">
+                    <p class="card-text mb-1"><i class="bi bi-airplane-takeoff me-2 text-info"></i> <strong>From:</strong> {{ flight.From_Name }} <small>({{ flight.From_City }})</small></p>
+                    <p class="card-text mb-1"><i class="bi bi-airplane-landing me-2 text-warning"></i> <strong>To:</strong> {{ flight.To_Name }} <small>({{ flight.To_City }})</small></p>
+                    <p class="card-text mb-1"><i class="bi bi-clock me-2 text-secondary"></i> <strong>Departure:</strong> {{ flight.Departure.strftime('%Y-%m-%d') }} <span>({{ flight.Departure.strftime('%H:%M') }})</span></p>
+                    <p class="card-text mb-1"><i class="bi bi-clock-fill me-2 text-secondary"></i> <strong>Arrival:</strong> {{ flight.Arrival.strftime('%Y-%m-%d') }} <span>({{ flight.Arrival.strftime('%H:%M') }})</span></p>
+                    <p class="card-text mb-1"><i class="bi bi-currency-rupee me-2 text-success"></i> <strong>Fare:</strong> ₹{{ flight.Fare_Amount }}</p>
+                    <p class="card-text mb-1"><i class="bi bi-座席 me-2 text-muted"></i> <strong>Seats Left:</strong> {{ flight.Remaining_Seats }}</p>
+                </div>
+                <div class="card-footer bg-white text-end border-top border-primary py-2">
+                    {% if flight.Remaining_Seats > 0 %}
+                    <a href="{{ url_for('transaction', flight_id = flight.Flight_ID) }}" class="btn btn-primary btn-sm"><i class="bi bi-bookmark-plus me-1"></i> Book Now</a>
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled><i class="bi bi-x-octagon me-1"></i> Sold Out</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info mt-4" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> No flights found for the given criteria. Please adjust your search.
+    </div>
+{% endif %}
+</div>
+{% endblock %}

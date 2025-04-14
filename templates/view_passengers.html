@@ -1,0 +1,56 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-people-fill me-2"></i> View Passengers</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <i class="bi bi-person-lines-fill me-2"></i> Registered Passengers
+        </div>
+        <div class="card-body table-responsive">
+            {% if passengers %}
+                <table class="table table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in passengers %}
+                            <tr>
+                                <td>{{ p.Ps_ID }}</td>
+                                <td>{{ p.Name }}</td>
+                                <td>{{ p.Address }}</td>
+                                <td>{{ p.Age }}</td>
+                                <td>{{ p.Sex }}</td>
+                                <td>{{ p.Contacts }}</td>
+                                <td>{{ p.Email }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No passengers registered.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

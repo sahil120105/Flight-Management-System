@@ -1,0 +1,47 @@
+{% extends "base_passenger.html" %}
+{% block title %}Confirm Booking{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary"><i class="bi bi-check-circle-fill me-2"></i> Confirm Your Booking</h2>
+
+    <div class="card shadow-lg p-4 mb-5 bg-white rounded">
+        <div class="card-body">
+            <h5 class="card-title text-info">{{ flight.From_City }} <i class="bi bi-arrow-right"></i> {{ flight.To_City }}</h5>
+            <hr class="my-3">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="card-text">
+                        <strong><i class="bi bi-airplane-fill text-secondary me-2"></i> Airline:</strong> {{ flight.Company }}
+                    </p>
+                    <p class="card-text">
+                        <strong><i class="bi bi-calendar-departure-fill text-primary me-2"></i> Departure:</strong>
+                        {{ flight.Departure.strftime('%Y-%m-%d') }}
+                        <span class="text-muted">({{ flight.Departure.strftime('%H:%M') }})</span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="card-text">
+                        <strong><i class="bi bi-calendar-arrival-fill text-success me-2"></i> Arrival:</strong>
+                        {{ flight.Arrival.strftime('%Y-%m-%d') }}
+                        <span class="text-muted">({{ flight.Arrival.strftime('%H:%M') }})</span>
+                    </p>
+                    <p class="card-text">
+                        <strong><i class="bi bi-tag-fill text-warning me-2"></i> Fare:</strong>
+                        <span class="fw-bold">₹{{ flight.Fare_Amount }}</span>
+                    </p>
+                </div>
+            </div>
+            <p class="card-text">
+                <strong><i class="bi bi-座席-fill text-info me-2"></i> Seats Left:</strong> {{ flight.Remaining_Seats }}
+            </p>
+        </div>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <button type="submit" class="btn btn-success btn-lg" style="margin-right: 1em;"><i class="bi bi-check-lg me-2"></i> {{ form.submit.label.text }}</button>
+        <a href="{{ url_for('book_flight') }}" class="btn btn-outline-secondary btn-lg"><i class="bi bi-x-lg me-2"></i> Cancel</a>
+    </form>
+</div>
+{% endblock %}
