@@ -1,0 +1,79 @@
+{% extends 'base_passenger.html' %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 bg-white rounded">
+        <h2 class="mb-4"><i class="bi bi-person-gear-fill me-2"></i> My Profile</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-person-fill me-2"></i> Full Name</label>
+                    {{ form.name(class="form-control") }}
+                    {% for error in form.name.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-envelope-fill me-2"></i> Email</label>
+                    {{ form.email(class="form-control") }}
+                    {% for error in form.email.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-house-fill me-2"></i> Address</label>
+                    {{ form.address(class="form-control") }}
+                    {% for error in form.address.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-calendar-date-fill me-2"></i> Age</label>
+                    {{ form.age(class="form-control") }}
+                    {% for error in form.age.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-gender-ambiguous me-2"></i> Sex</label>
+                    {{ form.sex(class="form-control") }}
+                    {% for error in form.sex.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label font-weight-bold"><i class="bi bi-telephone-fill me-2"></i> Contact</label>
+                    {{ form.contacts(class="form-control") }}
+                    {% for error in form.contacts.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3"><i class="bi bi-save-fill me-2"></i> Update Profile</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

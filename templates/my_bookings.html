@@ -1,0 +1,117 @@
+{% extends 'base_passenger.html' %}
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2 class="text-primary"><i class="bi bi-bookmark-check-fill me-2"></i> My Bookings</h2>
+        
+    <hr class="my-5">
+
+    <section class="mb-5">
+        <h4 class="mb-3 text-success"><i class="bi bi-airplane-engines-fill me-2"></i> Upcoming Flights</h4>
+        {% if upcoming %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for flight in upcoming %}
+                    <div class="col mb-4"> 
+                        <div class="card shadow-sm h-100 border-success">
+                            <div class="card-body">
+                                <h5 class="card-title text-success">{{ flight.From_City }} <i class="bi bi-arrow-right"></i> {{ flight.To_City }}</h5>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-calendar-departure-fill text-info me-2"></i>
+                                    <strong>Departure:</strong> {{ flight.Departure.strftime('%Y-%m-%d') }}
+                                    <span class="text-muted">({{ flight.Departure.strftime('%H:%M') }})</span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-calendar-arrival-fill text-warning me-2"></i>
+                                    <strong>Arrival:</strong> {{ flight.Arrival.strftime('%Y-%m-%d') }}
+                                    <span class="text-muted">({{ flight.Arrival.strftime('%H:%M') }})</span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-building me-2 text-secondary"></i>
+                                    <strong>Airline:</strong> {{ flight.Company }}
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-currency-rupee me-2 text-success"></i>
+                                    <strong>Fare:</strong> ₹{{ flight.Amount }}
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-clock-history me-2 text-muted"></i>
+                                    <strong>Booked On:</strong> {{ flight.Transaction_Date.strftime('%Y-%m-%d') }}
+                                </p>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                    <input type="hidden" name="ts_id" value="{{ flight.TS_ID }}">
+                                    <input type="hidden" name="flight_id" value="{{ flight.Flight_ID }}">
+                                    <button type="submit" class="btn btn-sm btn-danger mt-2">Cancel Booking</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted"><i class="bi bi-info-circle me-2"></i> You have no upcoming flights.</p>
+        {% endif %}
+    </section>
+
+    <hr class="my-5">
+
+    <section class="mb-5">
+        <h4 class="mb-3 text-secondary"><i class="bi bi-check-circle-fill me-2"></i> Completed Flights</h4>
+        {% if completed %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for flight in completed %}
+                    <div class="col mb-4">
+                        <div class="card mb-3 shadow-sm h-100 border-secondary bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title text-secondary">{{ flight.From_City }} <i class="bi bi-arrow-right"></i> {{ flight.To_City }}</h5>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-calendar-departure me-2 text-info"></i>
+                                    <strong>Departure:</strong> {{ flight.Departure.strftime('%Y-%m-%d') }}
+                                    <span class="text-muted">({{ flight.Departure.strftime('%H:%M') }})</span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-calendar-arrival me-2 text-warning"></i>
+                                    <strong>Arrival:</strong> {{ flight.Arrival.strftime('%Y-%m-%d') }}
+                                    <span class="text-muted">({{ flight.Arrival.strftime('%H:%M') }})</span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-building me-2 text-muted"></i>
+                                    <strong>Airline:</strong> {{ flight.Company }}
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-currency-rupee me-2 text-success"></i>
+                                    <strong>Fare:</strong> ₹{{ flight.Amount }}
+                                </p>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-clock-fill me-2 text-muted"></i>
+                                    <strong>Booked On:</strong> {{ flight.Transaction_Date.strftime('%Y-%m-%d') }}
+                                </p>
+                                <div class="d-flex justify-content-end">
+                                    <span class="badge bg-secondary"><i class="bi bi-check-lg me-1"></i> Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted"><i class="bi bi-info-circle me-2"></i> You have no completed flights yet.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

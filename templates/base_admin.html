@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Admin Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}" style="font-size: 1.75em;">
+                <i class="bi bi-speedometer2 me-2 align-middle"></i> Flight Admin Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#adminNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNavbar">
+                <ul class="navbar-nav ml-auto">
+                    {% if session.get("is_superadmin") %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('manage_admins') }}">
+                                <i class="bi bi-person-gear me-1"></i> Admins
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_airplanes') }}"><i class="bi bi-airplane me-1"></i> Airplanes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_airports') }}"><i class="bi bi-geo-alt-fill me-1"></i> Airports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_countries') }}"><i class="bi bi-globe2 me-1"></i> Countries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_flights') }}"><i class="bi bi-calendar2-week me-1"></i> Flights</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('view_passengers') }}"><i class="bi bi-people-fill me-1"></i> Passengers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('view_transactions') }}"><i class="bi bi-receipt-cutoff me-1"></i> Transactions</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('admin_logout') }}" onclick="return confirm('Are you sure you want to logout?');"><i class="bi bi-box-arrow-right me-1"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white mt-5 p-3 text-center fixed-bottom">
+        &copy; 2024 Flight Management System - Admin Panel
+    </footer>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

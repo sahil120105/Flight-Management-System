@@ -1,0 +1,94 @@
+{% extends "base_admin.html" %}
+{% block content %}
+<div class="container mt-1">
+    <h2 class="mb-4"><i class="bi bi-receipt-cutoff me-2"></i> View Transactions</h2>
+
+    <div class="alert alert-info shadow-sm">
+        <strong>Overall Revenue:</strong> ₹{{ overall_revenue }}
+    </div>
+
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-dark text-white">
+            Transactions
+        </div>
+        <div class="card-body table-responsive">
+            {% if transactions %}
+            <table class="table table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>TS ID</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Passenger</th>
+                        <th>Flight ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                    <tr>
+                        <td>{{ tx.TS_ID }}</td>
+                        <td>{{ tx.Transaction_Date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>₹{{ tx.Amount }}</td>
+                        <td>{{ tx.Passenger_Name }}</td>
+                        <td>{{ tx.Flight_ID }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <nav aria-label="Transaction Pagination">
+                <ul class="pagination justify-content-center mt-3">
+                    {% for page_num in range(1, tx_pages + 1) %}
+                    <li class="page-item {% if tx_page == page_num %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('view_transactions', tx_page=page_num, rev_page=rev_page) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% else %}
+            <p class="text-muted">No transactions found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            Revenue by Passenger
+        </div>
+        <div class="card-body table-responsive">
+            {% if revenue_by_passenger %}
+            <table class="table table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Passenger ID</th>
+                        <th>Name</th>
+                        <th>Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rev in revenue_by_passenger %}
+                    <tr>
+                        <td>{{ rev.Ps_ID }}</td>
+                        <td>{{ rev.Name }}</td>
+                        <td>₹{{ rev.total_spent }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <nav aria-label="Revenue by Passenger Pagination">
+                <ul class="pagination justify-content-center mt-3">
+                    {% for page_num in range(1, rev_pages + 1) %}
+                    <li class="page-item {% if rev_page == page_num %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('view_transactions', tx_page=tx_page, rev_page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% else %}
+            <p class="text-muted">No revenue records found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

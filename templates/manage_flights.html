@@ -1,0 +1,166 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-airplane-engines"></i> Manage Flights</h2>
+
+    <!-- Add Flight Form -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="bi bi-plus-circle"></i> Add New Flight
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.departure.label(class="form-label") }}
+                        {{ form.departure(class="form-control", placeholder="2025-04-10 08:00:00") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.arrival.label(class="form-label") }}
+                        {{ form.arrival(class="form-control", placeholder="2025-04-10 12:00:00") }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {{ form.fare_amount.label(class="form-label") }}
+                        {{ form.fare_amount(class="form-control", placeholder="Enter fare amount") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.a_id.label(class="form-label") }}
+                        {{ form.a_id(class="form-select") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.remaining_seats.label(class="form-label") }} 
+                        <input type="text" class="form-control" placeholder="Auto-set to plane capacity" disabled>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        {{ form.starting_airport.label(class="form-label") }}
+                        {{ form.starting_airport(class="form-select") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.ending_airport.label(class="form-label") }}
+                        {{ form.ending_airport(class="form-select") }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Add Flight
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Flights Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <i class="bi bi-calendar-check"></i> Active Flights
+        </div>
+        <div class="card-body table-responsive">
+            {% if active_flights %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Fare</th>
+                        <th>Airplane</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in active_flights %}
+                    <tr>
+                        <td>{{ flight.Flight_ID }}</td>
+                        <td>{{ flight.Departure }}</td>
+                        <td>{{ flight.Arrival }}</td>
+                        <td>₹{{ flight.Fare_Amount }}</td>
+                        <td>{{ flight.A_ID }}</td>
+                        <td>{{ flight.Starting_Airport }}</td>
+                        <td>{{ flight.Ending_Airport }}</td>
+                        <td>{{ flight.Remaining_Seats }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Active Flights Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% for page_num in range(1, active_total_pages + 1) %}
+                    <li class="page-item {% if page_num == active_page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('manage_flights', active_page=page_num, completed_page=completed_page) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            {% else %}
+            <p class="text-muted">No active flights found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Completed Flights Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <i class="bi bi-check-all"></i> Completed Flights
+        </div>
+        <div class="card-body table-responsive">
+            {% if completed_flights %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Fare</th>
+                        <th>Airplane</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in completed_flights %}
+                    <tr>
+                        <td>{{ flight.Flight_ID }}</td>
+                        <td>{{ flight.Departure }}</td>
+                        <td>{{ flight.Arrival }}</td>
+                        <td>₹{{ flight.Fare_Amount }}</td>
+                        <td>{{ flight.A_ID }}</td>
+                        <td>{{ flight.Starting_Airport }}</td>
+                        <td>{{ flight.Ending_Airport }}</td>
+                        <td>{{ flight.Remaining_Seats }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Completed Flights Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% for page_num in range(1, completed_total_pages + 1) %}
+                    <li class="page-item {% if page_num == completed_page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('manage_flights', active_page=active_page, completed_page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            {% else %}
+            <p class="text-muted">No completed flights found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

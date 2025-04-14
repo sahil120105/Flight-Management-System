@@ -1,0 +1,64 @@
+{% extends 'base_passenger.html' %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="container mt-5">
+    {% if user %}
+        <h2 class="text-center mb-4"><i class="bi bi-person-circle me-2"></i> Welcome {{ user[1] }}!</h2>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="bi bi-airplane-fill me-2"></i> Book a Flight</h5>
+                    <p class="card-text"><i class="bi bi-search me-2 text-muted"></i> Search and book flights easily.</p>
+                    <a href="{{ url_for('book_flight') }}" class="btn btn-primary"><i class="bi bi-bookmark-plus me-1"></i> Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-warning"><i class="bi bi-briefcase-fill me-2"></i> My Bookings</h5>
+                    <p class="card-text"><i class="bi bi-folder-check me-2 text-muted"></i> View your flight bookings.</p>
+                    <a href="{{ url_for('my_bookings') }}" class="btn btn-warning"><i class="bi bi-folder-symlink-fill me-1"></i> Manage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-info"><i class="bi bi-person-gear me-2"></i> Profile</h5>
+                    <p class="card-text"><i class="bi bi-pencil-square me-2 text-muted"></i> Update your personal information.</p>
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-info"><i class="bi bi-pencil-fill me-1"></i> Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</h5>
+                    <p class="card-text"><i class="bi bi-shield-lock-fill me-2 text-muted"></i> Sign out of your account securely.</p>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger"><i class="bi bi-door-closed-fill me-1"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
